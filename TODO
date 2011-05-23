@@ -1,0 +1,3 @@
+- More testing
+- More examples (udf and samba mounts, different charsets and locales)
+- Try to solve case problem in kernel iconv

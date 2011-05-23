@@ -1,0 +1,16 @@
+2009-04-24 kiconvtool-0.93
+ * Add an option to list currently loaded charsets
+ * Update manpage
+
+2008-10-29 kiconvtool-0.92
+ * Add support for loading filesystem iconv modules into rcscript
+ * Fix printing 64bit values in -m
+ * Fix typo
+
+2008-07-07 kiconvtool-0.91
+ * Fix error handling
+ * Turn README into manpage
+ * Add TODO and ChangeLog
+
+2008-06-25 kiconvtool-0.90
+ * Initial release

@@ -1,3 +1,6 @@
+2009-04-24 kiconvtool-0.94
+ * Fix for FreeBSD 8.0 and above
+
 2009-04-24 kiconvtool-0.93
  * Add an option to list currently loaded charsets
  * Update manpage

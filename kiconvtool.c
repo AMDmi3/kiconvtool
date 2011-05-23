@@ -161,6 +161,10 @@ int load_pair(const char *local, const char *foreign) {
 		return 1;
 	}
 
+	if (kiconv_add_xlat16_cspair(KICONV_WCTYPE_NAME, local, KICONV_WCTYPE) != 0) {
+		warn("kiconv_add_xlat16_cspair(%s:%s)", local, KICONV_WCTYPE_NAME);
+	}
+
 	if (flag_verbose)
 		fprintf(stderr, "loaded charset pair: %s:%s\n", local, foreign);
 

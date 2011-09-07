@@ -33,7 +33,7 @@ load_rc_config $name
 : ${kiconv_charset_pairs=""}
 : ${kiconv_fstypes=""}
 
-command="/usr/local/sbin/kiconvtool"
+command="%%PREFIX%%/sbin/kiconvtool"
 command_args="-l ${kiconv_local_charsets} -f ${kiconv_foreign_charsets} -p ${kiconv_charset_pairs}"
 start_cmd="kiconv_start"
 stop_cmd=":"

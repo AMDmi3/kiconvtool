@@ -161,8 +161,16 @@ int load_pair(const char *local, const char *foreign) {
 		return 1;
 	}
 
+	/* When locale is set (that is, when a user mounts a volume),
+	 * kiconv_add_xlat16_cspair also loads wctype towlower/towupper
+	 * tables.
+	 *
+	 * However, since locale is not guaranteed to be set when
+	 * kiconvtool is run (e.g. when it's called from rc system),
+	 * load these tables by hand. */
 	if (kiconv_add_xlat16_cspair(KICONV_WCTYPE_NAME, local, KICONV_WCTYPE) != 0) {
 		warn("kiconv_add_xlat16_cspair(%s:%s)", local, KICONV_WCTYPE_NAME);
+		return 1;
 	}
 
 	if (flag_verbose)

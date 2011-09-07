@@ -26,4 +26,4 @@ README: kiconvtool.8
 	groff -S -man -Tascii < $> | col -b > $@
 
 clean:
-	rm -f kiconvtool *.o kiconv.sh
+	rm -f kiconvtool kiconv.sh

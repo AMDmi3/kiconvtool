@@ -1,3 +1,8 @@
+2011-09-08 kiconvtool-0.95
+ * Tweak makefile to allow installation
+ * Fix rc.d script to run after ldconfig is set up
+ * Add/fix comments and documentation
+
 2009-04-24 kiconvtool-0.94
  * Fix for FreeBSD 8.0 and above
 

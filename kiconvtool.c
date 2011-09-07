@@ -49,9 +49,9 @@ int flag_memstat = 0;
 int flag_cslist = 0;
 
 /* arrays of charset/pair names */
-char **local_charsets = 0;
-char **foreign_charsets = 0;
-char **pairs = 0;
+char **local_charsets = NULL;
+char **foreign_charsets = NULL;
+char **pairs = NULL;
 
 /* count of charsets/pairs in corresonding arrays */
 int num_local_charsets = 0;

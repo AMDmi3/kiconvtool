@@ -8,7 +8,7 @@ BSD_INSTALL_PROGRAM?=	install -s -m 555
 BSD_INSTALL_SCRIPT?=	install -m 555
 BSD_INSTALL_MAN?=	install -m 444
 
-all: kiconvtool
+all: kiconvtool kiconv.sh
 
 install: kiconvtool kiconv.sh
 	mkdir -p ${PREFIX}/sbin/ ${PREFIX}/etc/rc.d/ ${PREFIX}/man/man8/

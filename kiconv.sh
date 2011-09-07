@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # PROVIDE: kiconv
-# REQUIRE: mountcritremote
+# REQUIRE: mountcritremote ldconfig
 # BEFORE:  DAEMON
 # KEYWORD: nojail shutdown
 #

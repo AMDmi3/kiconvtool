@@ -13,7 +13,7 @@ all: kiconvtool
 install: kiconvtool kiconv.sh
 	mkdir -p ${PREFIX}/sbin/ ${PREFIX}/etc/rc.d/ ${PREFIX}/man/man8/
 	${BSD_INSTALL_PROGRAM} kiconvtool ${PREFIX}/sbin/
-	${BSD_INSTALL_SCRIPT} kiconv.sh ${PREFIX}/etc/rc.d/
+	${BSD_INSTALL_SCRIPT} kiconv.sh ${PREFIX}/etc/rc.d/kiconv
 	${BSD_INSTALL_MAN} kiconvtool.8 ${PREFIX}/man/man8/
 
 kiconvtool: kiconvtool.c

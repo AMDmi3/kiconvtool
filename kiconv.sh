@@ -17,7 +17,7 @@
 # kiconv_charset_pairs (str):    Space separated list of additional charset
 #                                pairs in form of LOCAL:REMOTE
 #
-# See /usr/local/share/doc/kiconvtool/README for details
+# See kiconvtool(8) for details
 #
 
 . /etc/rc.subr

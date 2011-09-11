@@ -61,7 +61,7 @@ Specify foreign charset(s). These are charset(s) used inside file systems to sto
 Specify charset pair(s). Each pair consists of local charset and foreign charset, separated by colon.
 .El
 .Pp
-To load needed charset conversion tables, you need to specify one or more local-foreign charset pairs. You can do it in two ways:
+To load needed charset conversion tables, you should specify one or more local-foreign charset pairs. You can do it in two ways:
 .Bl -bullet -offset indent
 .It
 Explicitly specify needed pairs with 
@@ -71,9 +71,9 @@ flag. For example:
 kiconvtool -p KOI8-R:CP866 KOI8-R:UTF-16BE
 .Ed
 .It
-Specify all needed local charsets with
+Specify all required local charsets with
 .Fl l
-flag and all needed foreign charsets with
+flag and all required foreign charsets with
 .Fl f
 flag. For example:
 .Bd -literal -offset indent
@@ -88,7 +88,7 @@ To know which character sets you need for your media, first mount it under root 
 kiconvtool -d
 .Ed
 .Pp
-to get list of charset tables loaded for those mounts. Note, that for each charset pair (LOCAL, FOREIGN), there will be two conversions (LOCAL -> FOREIGN and FOREIGN -> LOCAL).
+to get list of charset tables loaded after your mounts. Note, that for each charset pair (LOCAL, FOREIGN), there will be two conversions (LOCAL -> FOREIGN and FOREIGN -> LOCAL).
 .Pp
 Don't forget, that you need iconv library and iconv support for specific file system(s) to either be compiled into kernel or loaded as modules. Thus, for msdosfs you either need
 .Bd -literal -offset indent
@@ -101,7 +101,7 @@ options   LIBICONV
 options   MSDOSFS_ICONV
 .Ed
 .Pp
-in your kernel config.
+in your kernel config. Alternatively, rc.d script provided with kiconvtool can load required modules for you (see below).
 .Sh EXAMPLES
 1) My locale is ru_RU.KOI8-R, and I want to mount FAT32 with Russian file names from my USB flash drive with the following command:
 .Bd -literal -offset indent
@@ -129,11 +129,11 @@ Just add the following lines to /etc/rc.conf:
 .Bd -literal -offset indent
 kiconv_preload="YES"
 # character sets are separated by space, just like in -l and -f arguments
-kiconv_local_charsets="list of local charsets"
-kiconv_foreign_charsets="list of foreign charsets"
-# or
-kiconv_charset_pairs="list of charset pairs"
-# also we offer a shortcut for filesystem iconv modules loading
+kiconv_local_charsets="KOI8-R UTF-8"
+kiconv_foreign_charsets="CP866 UTF-16BE"
+# -or-
+kiconv_charset_pairs="UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+# script also offers a convenient way to load required kernel iconv modules
 kiconv_fstypes="msdosfs cd9660"
 .Ed
 .Pp

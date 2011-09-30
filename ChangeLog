@@ -1,3 +1,7 @@
+2011-10-01 kiconvtool-0.96
+ * Documentation updates
+ * Allow to directly specify kiconvtool flags from rc.conf
+
 2011-09-08 kiconvtool-0.95
  * Tweak makefile to allow installation
  * Fix rc.d script to run after ldconfig is set up

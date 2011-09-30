@@ -108,12 +108,19 @@ EXAMPLES
      script provided with kiconvtool to load charset conversion tables on sys-
      tem startup.  Just add the following lines to /etc/rc.conf:
 
+	   # enable kiconv script
 	   kiconv_preload="YES"
-	   # character sets are separated by space, just like in -l and -f arguments
+
+	   # specify local/foreign encodings (all 4 ways demonstrated here load the same set):
 	   kiconv_local_charsets="KOI8-R UTF-8"
 	   kiconv_foreign_charsets="CP866 UTF-16BE"
-	   # -or-
+	   # or
 	   kiconv_charset_pairs="UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+	   # or (you may specify kiconvtool flags directly)
+	   kiconv_flags="-l KOI8-R UTF-8 -f CP866 UTF-16BE"
+	   # or
+	   kiconv_flags="-p UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+
 	   # script also offers a convenient way to load required kernel iconv modules
 	   kiconv_fstypes="msdosfs cd9660"
 

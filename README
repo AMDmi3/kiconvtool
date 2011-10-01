@@ -137,4 +137,4 @@ BUGS
      mounting, you should use KOI8-R (not koi8-r or Koi8-R) in kiconvtool as
      well. The best idea is to use uppercase charset names everywhere.
 
-FreeBSD 			 July 7, 2008			       FreeBSD
+FreeBSD 		       October 01, 2011 		       FreeBSD

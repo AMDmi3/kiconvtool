@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright (c) 2008-2011 Dmitry Marakasov <amdmi3@FreeBSD.org>
  * All rights reserved.
  *

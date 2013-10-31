@@ -1,3 +1,6 @@
+2013-10-31 kiconvtool-0.97
+ * DESTDIR support in Makefile
+
 2011-10-01 kiconvtool-0.96
  * Documentation updates
  * Allow to directly specify kiconvtool flags from rc.conf

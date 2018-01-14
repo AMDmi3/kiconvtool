@@ -1,3 +1,6 @@
+2018-01-14 kiconvtool-0.98
+ * Manpage typo fix
+
 2013-10-31 kiconvtool-0.97
  * DESTDIR support in Makefile
 

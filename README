@@ -41,7 +41,8 @@ DESCRIPTION
 		Specify foreign charset(s). These are charset(s) used inside
 		file systems to store file names.
 
-     -l pair	Specify charset pair(s). Each pair consists of local charset
+     -p pair
+		Specify charset pair(s). Each pair consists of local charset
 		and foreign charset, separated by colon.
 
      To load needed charset conversion tables, you should specify one or more

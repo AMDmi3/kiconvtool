@@ -24,7 +24,7 @@ kiconv.sh: kiconv.sh.in
 	sed -e 's|%%PREFIX%%|${PREFIX}|' < $> > $@
 
 README: kiconvtool.8
-	groff -S -man -Tascii < $> | col -b > $@
+	man ./$> | col -b > $@
 
 clean:
 	rm -f kiconvtool kiconv.sh

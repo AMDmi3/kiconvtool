@@ -1,14 +1,14 @@
 KICONVTOOL(8)		FreeBSD System Manager's Manual 	 KICONVTOOL(8)
 
 NAME
-     kiconvtool -- load kernel iconv charset tables
+     kiconvtool – load kernel iconv charset tables
 
 SYNOPSIS
      kiconvtool [-hvmd] [-l local ...] [-f foreign ...] [-p pair ...]
 
 DESCRIPTION
-     On FreeBSD, it's possible to allow unprivileged users to mount file sys-
-     tems without using su or sudo. This can be enabled with vfs.usermount
+     On FreeBSD, it's possible to allow unprivileged users to mount file
+     systems without using su or sudo. This can be enabled with vfs.usermount
      sysctl. However, if file name conversion is used when mounting a file
      system, in most cases mount will fail with e.g. `mount_msdosfs:
      msdosfs_iconv: Operation not permitted' error. This is caused by the fact
@@ -19,8 +19,8 @@ DESCRIPTION
 
      kiconvtool utility allows you to preload specific charset tables into
      kernel, so you can allow unprivileged users to mount file systems with
-     file name conversion, but still control amount of memory taken by conver-
-     sion tables.
+     file name conversion, but still control amount of memory taken by
+     conversion tables.
 
      The options are as follows:
 
@@ -39,23 +39,23 @@ DESCRIPTION
 
      -f charset
 		Specify foreign charset(s). These are charset(s) used inside
-		file systems to store file names.
+		file systems to store file names. Note that you don't need to
+		specify UTF-16BE as it's always assumed.
 
-     -p pair
-		Specify charset pair(s). Each pair consists of local charset
+     -p pair	Specify charset pair(s). Each pair consists of local charset
 		and foreign charset, separated by colon.
 
      To load needed charset conversion tables, you should specify one or more
      local-foreign charset pairs. You can do it in two ways:
 
-	   o   Explicitly specify needed pairs with -p flag. For example:
+	   •   Explicitly specify needed pairs with -p flag. For example:
 
-		     kiconvtool -p KOI8-R:CP866 KOI8-R:UTF-16BE
+		     kiconvtool -p KOI8-R:CP866 KOI8-R:CP1251
 
-	   o   Specify all required local charsets with -l flag and all
+	   •   Specify all required local charsets with -l flag and all
 	       required foreign charsets with -f flag. For example:
 
-		     kiconvtool -l KOI8-R -f CP866 UTF-16BE
+		     kiconvtool -l KOI8-R -f CP866 CP1251
 
      You can combine those two ways (first, pairs are formed from all possible
      combinations of provided local/foreign charsets, then explicitly defined
@@ -81,8 +81,8 @@ DESCRIPTION
 	   options   LIBICONV
 	   options   MSDOSFS_ICONV
 
-     in your kernel config. Alternatively, rc.d script provided with kicon-
-     vtool can load required modules for you (see below).
+     in your kernel config. Alternatively, rc.d script provided with
+     kiconvtool can load required modules for you (see below).
 
 EXAMPLES
      1) My locale is ru_RU.KOI8-R, and I want to mount FAT32 with Russian file
@@ -91,36 +91,38 @@ EXAMPLES
 	   mount_msdosfs -L ru_RU.KOI8-R -D CP866 /dev/da0s1 ~/mnt/flash
 
      In my case, msdosfs uses both CP866 for 8.3 legacy file names and
-     UTF16-BE for Win95 long names. So to be able to execute the mount command
-     above as unprivileged user, I need to run this as root first:
+     UTF-16BE for Win95 long names. So to be able to execute the mount command
+     above as unprivileged user, I need to run this as root first (note that
+     UTF-16BE doesn't need to be specified):
 
-	   kiconvtool -l KOI8-R -f UTF-16BE CP866
+	   kiconvtool -l KOI8-R -f CP866
 
      2) The same thing, but for mounting CD-ROM. I want to run this as a user:
 
 	   mount_cd9660 -C KOI8-R /dev/acd0 ~/mnt/cdrom
 
-     ISO9660 only uses UTF16-BE internally, so I only need one pair:
+     ISO9660 only uses UTF-16BE internally, so I only need to specify local
+     charset:
 
-	   kiconvtool -l KOI8-R -f UTF-16BE
+	   kiconvtool -l KOI8-R
 
      You only need to call kiconvtool once to load charset tables - after
      that, mounting will work until reboot.  For convenience, you can use rcNG
-     script provided with kiconvtool to load charset conversion tables on sys-
-     tem startup.  Just add the following lines to /etc/rc.conf:
+     script provided with kiconvtool to load charset conversion tables on
+     system startup.  Just add the following lines to /etc/rc.conf:
 
 	   # enable kiconv script
 	   kiconv_preload="YES"
 
 	   # specify local/foreign encodings (all 4 ways demonstrated here load the same set):
 	   kiconv_local_charsets="KOI8-R UTF-8"
-	   kiconv_foreign_charsets="CP866 UTF-16BE"
+	   kiconv_foreign_charsets="CP866"
 	   # or
-	   kiconv_charset_pairs="UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+	   kiconv_charset_pairs="UTF-8:CP866 KOI8-R:CP866"
 	   # or (you may specify kiconvtool flags directly)
-	   kiconv_flags="-l KOI8-R UTF-8 -f CP866 UTF-16BE"
+	   kiconv_flags="-l KOI8-R UTF-8 -f CP866"
 	   # or
-	   kiconv_flags="-p UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+	   kiconv_flags="-p UTF-8:CP866 KOI8-R:CP866"
 
 	   # script also offers a convenient way to load required kernel iconv modules
 	   kiconv_fstypes="msdosfs cd9660"
@@ -130,12 +132,13 @@ SEE ALSO
      kiconv(3)
 
 AUTHORS
-     Dmitry Marakasov <amdmi3@FreeBSD.org>
+     Dmitry Marakasov ⟨amdmi3@FreeBSD.org⟩
 
 BUGS
-     The main bug is not in kiconvtool itself, but in kernel iconv implementa-
-     tion: charset names are case sensitive. So if you're using KOI8-R for
-     mounting, you should use KOI8-R (not koi8-r or Koi8-R) in kiconvtool as
-     well. The best idea is to use uppercase charset names everywhere.
+     The main bug is not in kiconvtool itself, but in kernel iconv
+     implementation: charset names are case sensitive. So if you're using
+     KOI8-R for mounting, you should use KOI8-R (not koi8-r or Koi8-R) in
+     kiconvtool as well. The best idea is to use uppercase charset names
+     everywhere.
 
-FreeBSD 		       October 01, 2011 		       FreeBSD
+FreeBSD 			  May 8, 2018			       FreeBSD

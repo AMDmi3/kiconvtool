@@ -1,5 +1,5 @@
 .\"
-.\" Copyright (c) 2008 Dmitry Marakasov
+.\" Copyright (c) 2008-2018 Dmitry Marakasov
 .\" All rights reserved.
 .\"
 .\" Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd October 01, 2011
+.Dd May 08, 2018
 .Dt KICONVTOOL 8
 .Os FreeBSD
 .Sh NAME
@@ -56,7 +56,7 @@ Display list of currently loaded charset conversion tables.
 .It Fl l Ar charset
 Specify local charset(s). Usually locale(s) of user(s) who will mount file systems.
 .It Fl f Ar charset
-Specify foreign charset(s). These are charset(s) used inside file systems to store file names.
+Specify foreign charset(s). These are charset(s) used inside file systems to store file names. Note that you don't need to specify UTF-16BE as it's always assumed.
 .It Fl p Ar pair
 Specify charset pair(s). Each pair consists of local charset and foreign charset, separated by colon.
 .El
@@ -68,7 +68,7 @@ Explicitly specify needed pairs with
 .Fl p
 flag. For example:
 .Bd -literal -offset indent
-kiconvtool -p KOI8-R:CP866 KOI8-R:UTF-16BE
+kiconvtool -p KOI8-R:CP866 KOI8-R:CP1251
 .Ed
 .It
 Specify all required local charsets with
@@ -77,7 +77,7 @@ flag and all required foreign charsets with
 .Fl f
 flag. For example:
 .Bd -literal -offset indent
-kiconvtool -l KOI8-R -f CP866 UTF-16BE
+kiconvtool -l KOI8-R -f CP866 CP1251
 .Ed
 .El
 .Pp
@@ -108,9 +108,9 @@ in your kernel config. Alternatively, rc.d script provided with kiconvtool can l
 mount_msdosfs -L ru_RU.KOI8-R -D CP866 /dev/da0s1 ~/mnt/flash
 .Ed
 .Pp
-In my case, msdosfs uses both CP866 for 8.3 legacy file names and UTF16-BE for Win95 long names. So to be able to execute the mount command above as unprivileged user, I need to run this as root first:
+In my case, msdosfs uses both CP866 for 8.3 legacy file names and UTF-16BE for Win95 long names. So to be able to execute the mount command above as unprivileged user, I need to run this as root first (note that UTF-16BE doesn't need to be specified):
 .Bd -literal -offset indent
-kiconvtool -l KOI8-R -f UTF-16BE CP866
+kiconvtool -l KOI8-R -f CP866
 .Ed
 .Pp
 2) The same thing, but for mounting CD-ROM. I want to run this as a user:
@@ -118,9 +118,9 @@ kiconvtool -l KOI8-R -f UTF-16BE CP866
 mount_cd9660 -C KOI8-R /dev/acd0 ~/mnt/cdrom
 .Ed
 .Pp
-ISO9660 only uses UTF16-BE internally, so I only need one pair:
+ISO9660 only uses UTF-16BE internally, so I only need to specify local charset:
 .Bd -literal -offset indent
-kiconvtool -l KOI8-R -f UTF-16BE
+kiconvtool -l KOI8-R
 .Ed
 .Pp
 You only need to call kiconvtool once to load charset tables - after that, mounting will work until reboot.
@@ -132,13 +132,13 @@ kiconv_preload="YES"
 
 # specify local/foreign encodings (all 4 ways demonstrated here load the same set):
 kiconv_local_charsets="KOI8-R UTF-8"
-kiconv_foreign_charsets="CP866 UTF-16BE"
+kiconv_foreign_charsets="CP866"
 # or
-kiconv_charset_pairs="UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+kiconv_charset_pairs="UTF-8:CP866 KOI8-R:CP866"
 # or (you may specify kiconvtool flags directly)
-kiconv_flags="-l KOI8-R UTF-8 -f CP866 UTF-16BE"
+kiconv_flags="-l KOI8-R UTF-8 -f CP866"
 # or
-kiconv_flags="-p UTF-8:CP866 UTF-8:UTF-16BE KOI8-R:CP866 KOI8-R:UTF-16BE"
+kiconv_flags="-p UTF-8:CP866 KOI8-R:CP866"
 
 # script also offers a convenient way to load required kernel iconv modules
 kiconv_fstypes="msdosfs cd9660"

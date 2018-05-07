@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Dmitry Marakasov <amdmi3@FreeBSD.org>
+ * Copyright (c) 2008-2018 Dmitry Marakasov <amdmi3@FreeBSD.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -157,24 +157,21 @@ int cslist() {
 
 /* loads charset pair into kernel iconv */
 int load_pair(const char *local, const char *foreign) {
-	if (kiconv_add_xlat16_cspairs(foreign, local) != 0) {
-		warn("kiconv_add_xlat16_cspairs(%s:%s)", local, foreign);
+	int res;
+	if ((res = kiconv_add_xlat16_cspairs(foreign, local)) != 0) {
+		warnc(res, "kiconv_add_xlat16_cspairs(%s, %s)", foreign, local);
 		return 1;
 	}
 
-#if __FreeBSD_version >= 800099
-	/* On FreeBSD >= 8 when locale is set (that is, when a user
-	 * mounts a volume), kiconv_add_xlat16_cspair also loads
-	 * wctype towlower/towupper tables.
-	 *
-	 * However, since locale is not guaranteed to be set when
-	 * kiconvtool is run (e.g. when it's called from rc system),
-	 * load these tables by hand. */
-	if (kiconv_add_xlat16_cspair(KICONV_WCTYPE_NAME, local, KICONV_WCTYPE) != 0) {
-		warn("kiconv_add_xlat16_cspair(%s:%s)", local, KICONV_WCTYPE_NAME);
+	if ((res = kiconv_add_xlat16_cspair(local, local, KICONV_FROM_UPPER | KICONV_LOWER)) != 0) {
+		warnc(res, "kiconv_add_xlat16_cspair(%s, %s, KICONV_FROM_UPPER | KICONV_LOWER)", local, local);
 		return 1;
 	}
-#endif
+
+	if ((res = kiconv_add_xlat16_cspair(KICONV_WCTYPE_NAME, local, KICONV_WCTYPE)) != 0) {
+		warnc(res, "kiconv_add_xlat16_cspair(KICONV_WCTYPE, %s, KICONV_WCTYPE)", local);
+		return 1;
+	}
 
 	if (flag_verbose)
 		fprintf(stderr, "loaded charset pair: %s:%s\n", local, foreign);
@@ -193,7 +190,7 @@ int main(int argc, char **argv) {
 	}
 
 	if ( ((local_charsets = malloc(argc * sizeof(char*))) == NULL) ||
-		((foreign_charsets = malloc(argc * sizeof(char*))) == NULL) ||
+		((foreign_charsets = malloc((argc + 1) * sizeof(char*))) == NULL) ||
 		((pairs = malloc(argc * sizeof(char*))) == NULL)) {
 		warn("malloc");
 		cleanup();
@@ -236,6 +233,9 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
+
+	/* always loaded by mount_msdosfs */
+	foreign_charsets[num_foreign_charsets++] = ENCODING_UNICODE;
 
 	/* compose and load all foreign/local pairs */
 	int f, l;

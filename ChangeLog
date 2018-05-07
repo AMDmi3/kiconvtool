@@ -1,3 +1,6 @@
+2018-05-08 kiconvtool-0.99
+ * Adapt to newer logic of kiconv and mount_msdosfs
+
 2018-01-14 kiconvtool-0.98
  * Manpage typo fix
 
